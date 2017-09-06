@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Idle from 'react-idle'
 
+// Whatever you'd like to render in response to changes in user activity.
 class App extends Component {
   render () {
     return (
