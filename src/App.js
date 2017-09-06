@@ -3,20 +3,43 @@ import Idle from 'react-idle'
 
 // How long before notifying that the user is idle in milliseconds.
 class App extends Component {
+  state = {
+    cornifyLoaded: false
+  }
+
+  componentWillMount () {
+    console.log('componentWillMount')
+  }
+
+  preloadCornify = () => {
+    const script = document.createElement('script')
+    script.onload = () => this.setState({ cornifyLoaded: true })
+    script.src = '//www.cornify.com/js/cornify.js'
+    document.body.appendChild(script)
+  }
+
+  cornify = () => {
+    window.cornify_add()
+  }
+
   render () {
     return (
-      <Idle
-        onChange={({idle}) => console.log({ idle })}
-        timeout={5000}
-        render={({ idle }) =>
-          <h1>
-            {idle
-              ? 'You are idle'
-              : 'Stop doing stuff for 2 second'
+      <div>
+        {this.state.cornifyLoaded === false && (
+          <Idle onChange={({ idle }) => {
+            if (idle) {
+              this.preloadCornify()
             }
-          </h1>
-        }
-      />
+          }}/>
+        )}
+
+        <button
+          disabled={!this.state.cornifyLoaded}
+          onClick={this.cornify}
+        >
+          MAke Some HAppiness
+        </button>
+      </div>
     )
   }
 }
